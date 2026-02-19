@@ -11,7 +11,6 @@ import {
   refreshIncidentDurations,
 } from "./storage";
 import { sendTelegramAlert } from "./notifications/telegram";
-import { sendPushNotifications } from "./notifications/webpush";
 import { handleRequest } from "./api/router";
 
 export default {
@@ -78,7 +77,7 @@ export default {
     await saveStatus(env.DB, results, incidents);
     await saveHistoryPoint(env.DB, results);
 
-    // Send notifications for transitions
+    // Send Telegram notifications for transitions
     ctx.waitUntil(
       Promise.all(
         transitions.map(async (t) => {
@@ -86,11 +85,6 @@ export default {
             await sendTelegramAlert(env, t);
           } catch (err) {
             console.error(`Telegram alert failed for ${t.serviceId}:`, err);
-          }
-          try {
-            await sendPushNotifications(env, t);
-          } catch (err) {
-            console.error(`Push notification failed for ${t.serviceId}:`, err);
           }
         })
       )

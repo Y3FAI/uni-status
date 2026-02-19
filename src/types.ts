@@ -51,14 +51,6 @@ export interface Transition {
   timestamp: string;
 }
 
-export interface PushSubscription {
-  endpoint: string;
-  keys: {
-    p256dh: string;
-    auth: string;
-  };
-}
-
 export interface HistoryPoint {
   timestamp: string;
   services: ServiceStatus[];
@@ -68,7 +60,4 @@ export interface Env {
   DB: D1Database;
   TELEGRAM_BOT_TOKEN: string;
   TELEGRAM_CHAT_ID: string;
-  VAPID_PUBLIC_KEY: string;
-  VAPID_PRIVATE_KEY: string;
-  VAPID_SUBJECT: string;
 }

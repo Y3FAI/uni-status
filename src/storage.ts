@@ -1,7 +1,6 @@
 import type {
   HistoryPoint,
   Incident,
-  PushSubscription,
   ServiceStatus,
   StatusResponse,
 } from "./types";
@@ -284,52 +283,6 @@ export async function refreshIncidentDurations(
 ): Promise<Incident[]> {
   // D1 doesn't need to update durations in DB - they're computed on read
   return getActiveIncidents(db);
-}
-
-// --- Push Subscriptions ---
-
-export async function savePushSubscription(
-  db: D1Database,
-  sub: PushSubscription
-): Promise<void> {
-  await db
-    .prepare(`
-      INSERT INTO push_subscriptions (endpoint, p256dh, auth)
-      VALUES (?, ?, ?)
-      ON CONFLICT(endpoint) DO UPDATE SET
-        p256dh = excluded.p256dh,
-        auth = excluded.auth
-    `)
-    .bind(sub.endpoint, sub.keys.p256dh, sub.keys.auth)
-    .run();
-}
-
-export async function deletePushSubscription(
-  db: D1Database,
-  endpoint: string
-): Promise<void> {
-  await db
-    .prepare("DELETE FROM push_subscriptions WHERE endpoint = ?")
-    .bind(endpoint)
-    .run();
-}
-
-export async function getAllPushSubscriptions(
-  db: D1Database
-): Promise<PushSubscription[]> {
-  const results = await db
-    .prepare("SELECT endpoint, p256dh, auth FROM push_subscriptions")
-    .all<{ endpoint: string; p256dh: string; auth: string }>();
-
-  if (!results.results) return [];
-
-  return results.results.map((r) => ({
-    endpoint: r.endpoint,
-    keys: {
-      p256dh: r.p256dh,
-      auth: r.auth,
-    },
-  }));
 }
 
 // --- Helpers ---

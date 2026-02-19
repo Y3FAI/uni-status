@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback } from "react";
 import type { StatusResponse, Status, HistoryPoint } from "@/lib/types";
-import { fetchStatus, fetchHistory, fetchVapidKey, subscribeToPush } from "@/lib/api";
+import { fetchStatus, fetchHistory } from "@/lib/api";
 
 // Brutalist shadow utilities
 const shadow = "shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]";
@@ -314,9 +314,9 @@ function Services({ data }: { data: StatusResponse }) {
 
 // Tips section
 const tips = [
-  { Icon: LinkIcon, text: "ادخل البلاك بورد مباشرة", desc: "إذا SSO واقف، ادخل من الرابط المباشر بدون موقع الجامعة", link: "https://lms.seu.edu.sa/" },
+  { Icon: LinkIcon, text: "ادخل البلاك بورد مباشرة", desc: "إذا SSO واقف، جرب تدخل البلاك بورد من الرابط المباشر", link: "https://lms.seu.edu.sa/" },
   { Icon: LogInIcon, text: "لا تسجل خروج!", desc: "إذا أنت داخل البلاك بورد وSSO واقف، لا تطلع لأنك ما راح تقدر تدخل مرة ثانية" },
-  { Icon: RefreshIcon, text: "حدّث الصفحة", desc: "أحياناً المشكلة تنحل بتحديث بسيط" },
+  { Icon: RefreshIcon, text: "جرب إنترنت ثاني", desc: "جرب تبدل بين 5G أو واي فاي أو الألياف" },
   { Icon: GlobeIcon, text: "جرب متصفح ثاني", desc: "جرب Chrome أو Firefox أو Edge" },
 ];
 
@@ -324,22 +324,6 @@ function Tips() {
   return (
     <section className="flex flex-col gap-4">
       <h2 className="text-2xl font-black tracking-tight text-black">نصائح وحلول</h2>
-      
-      {/* ما الفرق explanation */}
-      <BCard className="p-4 bg-yellow-100">
-        <div className="flex items-start gap-3">
-          <InfoIcon />
-          <div>
-            <p className="text-sm font-black text-black">ما الفرق؟</p>
-            <p className="text-xs text-black/70 mt-1">
-              <strong>SSO</strong> = صفحة تسجيل الدخول الموحد للجامعة. <strong>البلاك بورد</strong> = نظام المحاضرات والواجبات.
-            </p>
-            <p className="text-xs text-black/70 mt-1">
-              إذا الـ SSO واقف ما تقدر تدخل حتى لو البلاك بورد شغال، لأن تسجيل الدخول يمر عبر SSO أولاً.
-            </p>
-          </div>
-        </div>
-      </BCard>
 
       <div className="grid gap-4 sm:grid-cols-2">
         {tips.map((t, i) => {
@@ -355,7 +339,7 @@ function Tips() {
               </div>
             </BCard>
           );
-          
+
           if (t.link) {
             return (
               <a key={i} href={t.link} target="_blank" rel="noopener noreferrer">
@@ -366,6 +350,22 @@ function Tips() {
           return content;
         })}
       </div>
+
+      {/* ما الفرق explanation - at bottom */}
+      <BCard className="p-4 bg-yellow-100">
+        <div className="flex items-start gap-3">
+          <InfoIcon />
+          <div>
+            <p className="text-sm font-black text-black">ما الفرق؟</p>
+            <p className="text-xs text-black/70 mt-1">
+              <strong>SSO</strong> = صفحة تسجيل الدخول الموحد للجامعة. <strong>البلاك بورد</strong> = نظام المحاضرات والواجبات.
+            </p>
+            <p className="text-xs text-black/70 mt-1">
+              إذا الـ SSO واقف ما تقدر تدخل حتى لو البلاك بورد شغال، لأن تسجيل الدخول يمر عبر SSO أولاً.
+            </p>
+          </div>
+        </div>
+      </BCard>
     </section>
   );
 }
@@ -508,76 +508,22 @@ function Incidents({ data }: { data: StatusResponse }) {
   );
 }
 
-// Notifications section
-function Notify({ apiUrl }: { apiUrl: string }) {
-  const [pushEnabled, setPushEnabled] = useState(false);
-  const [loading, setLoading] = useState(false);
-
-  const handlePushSubscribe = async () => {
-    if (!("Notification" in window) || !("serviceWorker" in navigator)) {
-      alert("المتصفح لا يدعم الإشعارات");
-      return;
-    }
-
-    setLoading(true);
-    try {
-      const permission = await Notification.requestPermission();
-      if (permission !== "granted") {
-        alert("تم رفض إذن الإشعارات");
-        setLoading(false);
-        return;
-      }
-
-      const vapidKey = await fetchVapidKey();
-      const registration = await navigator.serviceWorker.ready;
-      const subscription = await registration.pushManager.subscribe({
-        userVisibleOnly: true,
-        applicationServerKey: vapidKey,
-      });
-
-      await subscribeToPush(subscription);
-      setPushEnabled(true);
-    } catch (err) {
-      console.error("Failed to subscribe:", err);
-      alert("فشل تفعيل الإشعارات");
-    } finally {
-      setLoading(false);
-    }
-  };
-
+// Notifications section - Telegram only
+function Notify() {
   return (
     <section className="flex flex-col gap-4">
       <h2 className="text-2xl font-black tracking-tight text-black">التنبيهات</h2>
-      <div className="grid gap-4 sm:grid-cols-2">
-        <button onClick={handlePushSubscribe} disabled={pushEnabled || loading} className="text-right">
-          <BCard
-            className={`p-4 flex items-center gap-3 ${pushEnabled ? "bg-emerald-300" : "bg-white hover:bg-cyan-50"} transition-colors`}
-          >
-            <div className="w-10 h-10 bg-yellow-300 border-2 border-black flex items-center justify-center shrink-0">
-              <BellIcon />
-            </div>
-            <div>
-              <p className="text-xs font-black text-black">
-                {loading ? "جاري التفعيل..." : pushEnabled ? "مفعّل" : "تنبيهات المتصفح"}
-              </p>
-              <p className="text-[10px] text-black/60 mt-0.5">
-                {pushEnabled ? "راح ننبهك" : "اعرف لما يرجع"}
-              </p>
-            </div>
-          </BCard>
-        </button>
-        <a href="https://t.me/seu_status" target="_blank" rel="noopener noreferrer">
-          <BCard className="p-4 flex items-center gap-3 bg-white hover:bg-cyan-50 transition-colors">
-            <div className="w-10 h-10 bg-cyan-200 border-2 border-black flex items-center justify-center shrink-0">
-              <SendIcon />
-            </div>
-            <div>
-              <p className="text-xs font-black text-black">قناة تيليجرام</p>
-              <p className="text-[10px] text-black/60 mt-0.5">اشترك للتحديثات</p>
-            </div>
-          </BCard>
-        </a>
-      </div>
+      <a href="https://t.me/seu_status" target="_blank" rel="noopener noreferrer">
+        <BCard className="p-4 flex items-center gap-3 bg-white hover:bg-cyan-50 transition-colors">
+          <div className="w-10 h-10 bg-cyan-200 border-2 border-black flex items-center justify-center shrink-0">
+            <SendIcon />
+          </div>
+          <div>
+            <p className="text-xs font-black text-black">قناة تيليجرام</p>
+            <p className="text-[10px] text-black/60 mt-0.5">اشترك للتحديثات</p>
+          </div>
+        </BCard>
+      </a>
     </section>
   );
 }
@@ -681,7 +627,7 @@ export default function StatusApp() {
       <Tips />
       <Timeline currentStatus={overallStatus} history={history} />
       <Incidents data={data} />
-      <Notify apiUrl={apiUrl} />
+      <Notify />
       <footer className="flex flex-col items-center gap-2 pt-8 border-t-3 border-black">
         <p className="text-xs font-bold text-black/50 text-center tracking-wider">
           تطبيق غير رسمي تم تطويره من قبل طلاب الجامعة السعودية الإلكترونية

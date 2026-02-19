@@ -1,10 +1,5 @@
-import type { Env, PushSubscription } from "../types";
-import {
-  getCurrentStatus,
-  getHistory,
-  savePushSubscription,
-  deletePushSubscription,
-} from "../storage";
+import type { Env } from "../types";
+import { getCurrentStatus, getHistory } from "../storage";
 
 export async function handleGetStatus(env: Env): Promise<Response> {
   const status = await getCurrentStatus(env.DB);
@@ -39,52 +34,33 @@ export async function handleGetHistory(
   });
 }
 
-export function handleGetVapidKey(env: Env): Response {
-  if (!env.VAPID_PUBLIC_KEY) {
-    return jsonResponse({ error: "VAPID not configured" }, 503);
+export async function handleTestTelegram(env: Env): Promise<Response> {
+  if (!env.TELEGRAM_BOT_TOKEN || !env.TELEGRAM_CHAT_ID) {
+    return jsonResponse({ error: "Telegram not configured" }, 503);
   }
 
-  return jsonResponse({ publicKey: env.VAPID_PUBLIC_KEY });
-}
+  const message = `🧪 <b>اختبار</b>\n\nهذه رسالة اختبار من seu-status\nالوقت: ${new Date().toLocaleString("ar-SA", { timeZone: "Asia/Riyadh" })}`;
 
-export async function handleSubscribe(
-  request: Request,
-  env: Env
-): Promise<Response> {
-  let body: PushSubscription;
+  const url = `https://api.telegram.org/bot${env.TELEGRAM_BOT_TOKEN}/sendMessage`;
 
-  try {
-    body = await request.json<PushSubscription>();
-  } catch {
-    return jsonResponse({ error: "Invalid JSON body" }, 400);
+  const response = await fetch(url, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      chat_id: env.TELEGRAM_CHAT_ID,
+      text: message,
+      parse_mode: "HTML",
+      disable_web_page_preview: true,
+    }),
+  });
+
+  const body = await response.json();
+
+  if (!response.ok) {
+    return jsonResponse({ error: "Telegram API error", details: body }, 500);
   }
 
-  if (!body.endpoint || !body.keys?.p256dh || !body.keys?.auth) {
-    return jsonResponse({ error: "Missing subscription fields" }, 400);
-  }
-
-  await savePushSubscription(env.DB, body);
-  return jsonResponse({ ok: true });
-}
-
-export async function handleUnsubscribe(
-  request: Request,
-  env: Env
-): Promise<Response> {
-  let body: { endpoint?: string };
-
-  try {
-    body = await request.json<{ endpoint: string }>();
-  } catch {
-    return jsonResponse({ error: "Invalid JSON body" }, 400);
-  }
-
-  if (!body.endpoint) {
-    return jsonResponse({ error: "Missing endpoint" }, 400);
-  }
-
-  await deletePushSubscription(env.DB, body.endpoint);
-  return jsonResponse({ ok: true });
+  return jsonResponse({ ok: true, message: "Test message sent to Telegram channel" });
 }
 
 function jsonResponse(data: unknown, status = 200): Response {
