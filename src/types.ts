@@ -65,7 +65,7 @@ export interface HistoryPoint {
 }
 
 export interface Env {
-  STATUS_KV: KVNamespace;
+  DB: D1Database;
   TELEGRAM_BOT_TOKEN: string;
   TELEGRAM_CHAT_ID: string;
   VAPID_PUBLIC_KEY: string;

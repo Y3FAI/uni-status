@@ -5,9 +5,10 @@ compatibility_date = "2025-02-14"
 [triggers]
 crons = ["*/1 * * * *"]
 
-[[kv_namespaces]]
-binding = "STATUS_KV"
-id = "PLACEHOLDER_KV_ID"
+[[d1_databases]]
+binding = "DB"
+database_name = "seu-status-db"
+database_id = "0a83f2aa-c2a9-4a72-9122-b1bde88c2fd9"
 
 [vars]
 TELEGRAM_CHAT_ID = ""

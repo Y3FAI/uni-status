@@ -23,7 +23,7 @@ export default {
     console.log("Cron triggered at", new Date().toISOString());
 
     // Get previous statuses for transition detection
-    const previous = await getCurrentStatus(env.STATUS_KV);
+    const previous = await getCurrentStatus(env.DB);
     const previousMap = new Map(
       previous?.services.map((s) => [s.id, s.status]) ?? []
     );
@@ -64,19 +64,19 @@ export default {
 
         // Manage incidents
         if (transition.to === "down" || transition.to === "degraded") {
-          await openIncident(env.STATUS_KV, result.id, result.name, transition.to);
+          await openIncident(env.DB, result.id, result.name, transition.to);
         } else if (transition.to === "up") {
-          await resolveIncident(env.STATUS_KV, result.id);
+          await resolveIncident(env.DB, result.id);
         }
       }
     }
 
     // Refresh incident durations
-    const incidents = await refreshIncidentDurations(env.STATUS_KV);
+    const incidents = await refreshIncidentDurations(env.DB);
 
     // Save current status and history
-    await saveStatus(env.STATUS_KV, results, incidents);
-    await saveHistoryPoint(env.STATUS_KV, results);
+    await saveStatus(env.DB, results, incidents);
+    await saveHistoryPoint(env.DB, results);
 
     // Send notifications for transitions
     ctx.waitUntil(

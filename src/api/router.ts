@@ -1,5 +1,5 @@
 import type { Env } from "../types";
-import { handleGetStatus, handleSubscribe, handleUnsubscribe } from "./handlers";
+import { handleGetStatus, handleGetHistory, handleSubscribe, handleUnsubscribe, handleGetVapidKey } from "./handlers";
 
 export async function handleRequest(
   request: Request,
@@ -17,10 +17,14 @@ export async function handleRequest(
 
   if (path === "/api/status" && request.method === "GET") {
     response = await handleGetStatus(env);
+  } else if (path === "/api/status/history" && request.method === "GET") {
+    response = await handleGetHistory(request, env);
   } else if (path === "/api/push/subscribe" && request.method === "POST") {
     response = await handleSubscribe(request, env);
   } else if (path === "/api/push/subscribe" && request.method === "DELETE") {
     response = await handleUnsubscribe(request, env);
+  } else if (path === "/api/push/vapid-key" && request.method === "GET") {
+    response = handleGetVapidKey(env);
   } else {
     response = new Response(JSON.stringify({ error: "Not found" }), {
       status: 404,

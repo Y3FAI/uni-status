@@ -10,7 +10,7 @@ export async function sendPushNotifications(
     return;
   }
 
-  const subscriptions = await getAllPushSubscriptions(env.STATUS_KV);
+  const subscriptions = await getAllPushSubscriptions(env.DB);
   if (subscriptions.length === 0) return;
 
   const payload = JSON.stringify({
@@ -28,7 +28,7 @@ export async function sendPushNotifications(
   for (let i = 0; i < results.length; i++) {
     const result = results[i];
     if (result.status === "rejected" || (result.status === "fulfilled" && !result.value)) {
-      await deletePushSubscription(env.STATUS_KV, subscriptions[i].endpoint);
+      await deletePushSubscription(env.DB, subscriptions[i].endpoint);
     }
   }
 }
