@@ -12,7 +12,7 @@ database_id = "0a83f2aa-c2a9-4a72-9122-b1bde88c2fd9"
 
 [vars]
 TELEGRAM_CHAT_ID = ""
-VAPID_SUBJECT = "mailto:admin@example.com"
+VAPID_SUBJECT = "mailto:admin@y3f.me"
 
 # Secrets (set via `wrangler secret put`):
 # TELEGRAM_BOT_TOKEN
