@@ -323,7 +323,7 @@ const tips = [
 function Tips() {
   return (
     <section className="flex flex-col gap-4">
-      <h2 className="text-2xl font-black tracking-tight text-black">نصائح وحلول</h2>
+      <h2 className="text-2xl font-black tracking-tight text-black">نصائح وحلول للأعطال</h2>
 
       <div className="grid gap-4 sm:grid-cols-2">
         {tips.map((t, i) => {
@@ -356,7 +356,7 @@ function Tips() {
         <div className="flex items-start gap-3">
           <InfoIcon />
           <div>
-            <p className="text-sm font-black text-black">ما الفرق؟</p>
+            <p className="text-sm font-black text-black">وش الفرق؟</p>
             <p className="text-xs text-black/70 mt-1">
               <strong>SSO</strong> = صفحة تسجيل الدخول الموحد للجامعة. <strong>البلاك بورد</strong> = نظام المحاضرات والواجبات.
             </p>
@@ -529,7 +529,7 @@ function Notify() {
 }
 
 // Main component
-const POLL_INTERVAL = 60;
+const POLL_INTERVAL = 300;
 
 export default function StatusApp() {
   const [data, setData] = useState<StatusResponse | null>(null);
@@ -624,9 +624,9 @@ export default function StatusApp() {
         countdown={countdown}
       />
       <Services data={data} />
-      <Tips />
       <Timeline currentStatus={overallStatus} history={history} />
       <Incidents data={data} />
+      <Tips />
       <Notify />
       <footer className="flex flex-col items-center gap-2 pt-8 border-t-3 border-black">
         <p className="text-xs font-bold text-black/50 text-center tracking-wider">
