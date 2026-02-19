@@ -253,6 +253,12 @@ function Services({ data }: { data: StatusResponse }) {
   const ssoDown = data.services.find((s) => s.id === "sso")?.status === "down";
   const lmsDown = data.services.find((s) => s.id === "lms")?.status === "down";
 
+  // Display order: lms, sso, eservice, email (email last)
+  const displayOrder = ["lms", "sso", "eservice", "email"];
+  const sortedServices = [...data.services].sort(
+    (a, b) => displayOrder.indexOf(a.id) - displayOrder.indexOf(b.id)
+  );
+
   const StatusIconSmall = (status: Status) => {
     if (status === "up") return <SmallCheckIcon />;
     if (status === "degraded") return <SmallAlertIcon />;
@@ -276,7 +282,7 @@ function Services({ data }: { data: StatusResponse }) {
       )}
 
       <div className="flex flex-col gap-4">
-        {data.services.map((s) => {
+        {sortedServices.map((s) => {
           const config = statusConfig[s.status];
           const name = serviceNames[s.id] || s.name;
           const desc = serviceDescriptions[s.id] || "";
@@ -311,7 +317,7 @@ const tips = [
   { Icon: LinkIcon, text: "ادخل البلاك بورد مباشرة", desc: "إذا SSO واقف، ادخل من الرابط المباشر بدون موقع الجامعة", link: "https://lms.seu.edu.sa/" },
   { Icon: LogInIcon, text: "لا تسجل خروج!", desc: "إذا أنت داخل البلاك بورد وSSO واقف، لا تطلع لأنك ما راح تقدر تدخل مرة ثانية" },
   { Icon: RefreshIcon, text: "حدّث الصفحة", desc: "أحياناً المشكلة تنحل بتحديث بسيط" },
-  { Icon: CookieIcon, text: "امسح الكوكيز", desc: "امسح بيانات المتصفح وجرب مرة ثانية" },
+  { Icon: GlobeIcon, text: "جرب متصفح ثاني", desc: "جرب Chrome أو Firefox أو Edge" },
 ];
 
 function Tips() {
