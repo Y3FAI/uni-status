@@ -1,5 +1,13 @@
 import type { Env, Transition } from "../types";
 
+// Service names in Arabic
+const serviceNamesAr: Record<string, string> = {
+  lms: "البلاك بورد",
+  sso: "تسجيل الدخول SSO",
+  eservice: "الخدمات الإلكترونية",
+  email: "البريد الإلكتروني",
+};
+
 export async function sendTelegramAlert(
   env: Env,
   transition: Transition
@@ -31,22 +39,24 @@ export async function sendTelegramAlert(
 
 function formatMessage(t: Transition): string {
   const emoji = getEmoji(t.to);
-  const action = getAction(t.to);
+  const serviceName = serviceNamesAr[t.serviceId] || t.serviceName;
+  const statusAr = getStatusAr(t.to);
+  const prevStatusAr = getStatusAr(t.from);
 
   if (t.to === "up") {
     return [
-      `${emoji} <b>${t.serviceName}</b> is back up`,
+      `${emoji} <b>${serviceName}</b> رجع شغال`,
       ``,
-      `Was: ${t.from}`,
-      `Recovered at: ${formatTime(t.timestamp)}`,
+      `كان: ${prevStatusAr}`,
+      `الوقت: ${formatTime(t.timestamp)}`,
     ].join("\n");
   }
 
   return [
-    `${emoji} <b>${t.serviceName}</b> ${action}`,
+    `${emoji} <b>${serviceName}</b> ${statusAr}`,
     ``,
-    `Previous: ${t.from}`,
-    `Detected at: ${formatTime(t.timestamp)}`,
+    `كان: ${prevStatusAr}`,
+    `الوقت: ${formatTime(t.timestamp)}`,
   ].join("\n");
 }
 
@@ -63,23 +73,24 @@ function getEmoji(status: string): string {
   }
 }
 
-function getAction(status: string): string {
+function getStatusAr(status: string): string {
   switch (status) {
+    case "up":
+      return "شغال";
     case "degraded":
-      return "is experiencing issues";
+      return "فيه مشاكل";
     case "down":
-      return "is DOWN";
+      return "واقف";
     default:
-      return "status changed";
+      return status;
   }
 }
 
 function formatTime(iso: string): string {
-  return new Date(iso).toLocaleString("en-US", {
+  return new Date(iso).toLocaleString("ar-SA", {
     timeZone: "Asia/Riyadh",
     hour: "2-digit",
     minute: "2-digit",
-    second: "2-digit",
     hour12: true,
   });
 }

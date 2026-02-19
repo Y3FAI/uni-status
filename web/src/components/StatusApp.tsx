@@ -542,14 +542,14 @@ function Notify({ apiUrl }: { apiUrl: string }) {
             </div>
           </BCard>
         </button>
-        <a href="https://t.me/SEUStatusBot" target="_blank" rel="noopener noreferrer">
+        <a href="https://t.me/seu_status" target="_blank" rel="noopener noreferrer">
           <BCard className="p-4 flex items-center gap-3 bg-white hover:bg-cyan-50 transition-colors">
             <div className="w-10 h-10 bg-cyan-200 border-2 border-black flex items-center justify-center shrink-0">
               <SendIcon />
             </div>
             <div>
-              <p className="text-xs font-black text-black">تيليجرام</p>
-              <p className="text-[10px] text-black/60 mt-0.5">تحديثات مباشرة</p>
+              <p className="text-xs font-black text-black">قناة تيليجرام</p>
+              <p className="text-[10px] text-black/60 mt-0.5">اشترك للتحديثات</p>
             </div>
           </BCard>
         </a>
