@@ -232,7 +232,7 @@ function Hero({
             {responseTime}ms
           </span>
         )}
-        <span className={`px-3 py-1 border-3 border-black bg-white ${shadowSm}`}>{timeStr}</span>
+        <span className={`px-3 py-1 border-3 border-black bg-white font-bold ${shadowSm}`}>{timeStr}</span>
         <span className={`px-3 py-1 border-3 border-black bg-cyan-200 font-bold ${shadowSm}`}>
           {countdown}ث
         </span>
@@ -568,7 +568,7 @@ export default function StatusApp() {
   const [isLoading, setIsLoading] = useState(true);
   const [countdown, setCountdown] = useState(POLL_INTERVAL);
 
-  const apiUrl = import.meta.env.PUBLIC_API_URL || "http://localhost:8787";
+  const apiUrl = import.meta.env.PUBLIC_API_URL || "https://seu-status.smmrai.workers.dev";
 
   const loadData = useCallback(async () => {
     try {
@@ -602,14 +602,25 @@ export default function StatusApp() {
     return () => clearInterval(interval);
   }, [loadData]);
 
+  // Show skeleton while loading - matches actual layout structure
   if (isLoading) {
     return (
-      <div className="flex items-center justify-center min-h-screen">
-        <div className="flex flex-col items-center gap-4">
-          <div className="w-12 h-12 border-4 border-black border-t-transparent animate-spin" />
-          <p className="text-sm font-black text-black">جاري التحقق...</p>
-        </div>
-      </div>
+      <main className="mx-auto max-w-2xl px-4 py-12 flex flex-col gap-10 sm:px-6 sm:py-16">
+        <header className="text-center">
+          <h1 className="text-lg font-bold text-black/60 tracking-wide">حالة أنظمة الجامعة السعودية الإلكترونية</h1>
+        </header>
+        <section className="flex flex-col gap-6">
+          <BCard className="p-6 bg-gray-200 animate-pulse">
+            <div className="flex flex-col items-center gap-4 text-center">
+              <div className="w-16 h-16 bg-gray-300 rounded-full" />
+              <h1 className="text-4xl font-black uppercase tracking-tight text-black sm:text-5xl leading-tight">
+                هل البلاك بورد شغال؟
+              </h1>
+              <div className="h-10 w-40 bg-gray-300 rounded" />
+            </div>
+          </BCard>
+        </section>
+      </main>
     );
   }
 
