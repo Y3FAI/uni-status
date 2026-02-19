@@ -580,7 +580,6 @@ export default function StatusApp() {
       setError(e instanceof Error ? e.message : "خطأ غير معروف");
     } finally {
       setIsLoading(false);
-      setCountdown(POLL_INTERVAL);
     }
   }, []);
 
