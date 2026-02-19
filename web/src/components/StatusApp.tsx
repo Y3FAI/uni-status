@@ -314,30 +314,29 @@ function Services({ data }: { data: StatusResponse }) {
 
 // Tips section
 const tips = [
-  { Icon: RefreshIcon, text: "حدّث الصفحة" },
-  { Icon: CookieIcon, text: "امسح الكوكيز" },
-  { Icon: GlobeIcon, text: "جرب متصفح ثاني" },
-  { Icon: LogInIcon, text: "SSO واقف؟ لا تسجل خروج" },
-  { Icon: MailIcon, text: "البريد شغال لحاله" },
+  { Icon: RefreshIcon, text: "حدّث الصفحة", desc: "أحياناً المشكلة تنحل بتحديث بسيط" },
+  { Icon: CookieIcon, text: "امسح الكوكيز", desc: "امسح بيانات المتصفح وجرب مرة ثانية" },
+  { Icon: GlobeIcon, text: "جرب متصفح ثاني", desc: "Chrome أو Firefox أو Edge" },
+  { Icon: LogInIcon, text: "لا تسجل خروج", desc: "إذا SSO واقف وأنت داخل، لا تطلع!" },
+  { Icon: MailIcon, text: "البريد مستقل", desc: "البريد الجامعي يشتغل لحاله عن البلاك بورد" },
 ];
 
-function Tips({ status }: { status: Status }) {
-  if (status === "up") return null;
-
+function Tips() {
   return (
     <section className="flex flex-col gap-4">
-      <h2 className="text-2xl font-black tracking-tight text-black">
-        {status === "down" ? "وأنت تنتظر" : "جرب هذي الحلول"}
-      </h2>
+      <h2 className="text-2xl font-black tracking-tight text-black">نصائح وحلول</h2>
       <div className="grid gap-4 sm:grid-cols-2">
         {tips.map((t, i) => {
           const { Icon } = t;
           return (
-            <BCard key={i} className="p-4 bg-white flex items-center gap-3">
+            <BCard key={i} className="p-4 bg-white flex items-start gap-3">
               <div className="w-10 h-10 bg-cyan-200 border-2 border-black flex items-center justify-center shrink-0">
                 <Icon />
               </div>
-              <p className="text-xs font-bold text-black">{t.text}</p>
+              <div>
+                <p className="text-sm font-black text-black">{t.text}</p>
+                <p className="text-xs text-black/60 mt-1">{t.desc}</p>
+              </div>
             </BCard>
           );
         })}
@@ -654,13 +653,16 @@ export default function StatusApp() {
         countdown={countdown}
       />
       <Services data={data} />
-      <Tips status={overallStatus} />
+      <Tips />
       <Timeline currentStatus={overallStatus} history={history} />
       <Incidents data={data} />
       <Notify apiUrl={apiUrl} />
-      <footer className="flex flex-col items-center gap-1 pt-8 border-t-3 border-black">
+      <footer className="flex flex-col items-center gap-2 pt-8 border-t-3 border-black">
         <p className="text-xs font-bold text-black/50 text-center tracking-wider">
           تطبيق غير رسمي تم تطويره من قبل طلاب الجامعة السعودية الإلكترونية
+        </p>
+        <p className="text-xs text-black/40 text-center">
+          لمتابعة حالة أنظمة الجامعة الإلكترونية وتقديم نصائح وحلول للمشاكل التي قد تواجه الطلاب
         </p>
       </footer>
     </main>
