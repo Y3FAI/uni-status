@@ -131,6 +131,13 @@ const MailIcon = () => (
   </svg>
 );
 
+const LinkIcon = () => (
+  <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+    <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71" />
+    <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71" />
+  </svg>
+);
+
 const BellIcon = () => (
   <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
     <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9" />
@@ -295,41 +302,44 @@ function Services({ data }: { data: StatusResponse }) {
           );
         })}
       </div>
-
-      <BCard className="p-4 bg-white">
-        <div className="flex items-start gap-3">
-          <InfoIcon />
-          <div>
-            <p className="text-xs font-black text-black">ما الفرق؟</p>
-            <p className="text-xs text-black/70 mt-1">
-              <strong>SSO</strong> = صفحة تسجيل الدخول. <strong>البلاك بورد</strong> = المحاضرات.
-              إذا الـ SSO واقف ما تقدر تدخل حتى لو البلاك بورد شغال.
-            </p>
-          </div>
-        </div>
-      </BCard>
     </section>
   );
 }
 
 // Tips section
 const tips = [
+  { Icon: LinkIcon, text: "ادخل البلاك بورد مباشرة", desc: "إذا SSO واقف، ادخل من الرابط المباشر بدون موقع الجامعة", link: "https://lms.seu.edu.sa/" },
+  { Icon: LogInIcon, text: "لا تسجل خروج!", desc: "إذا أنت داخل البلاك بورد وSSO واقف، لا تطلع لأنك ما راح تقدر تدخل مرة ثانية" },
   { Icon: RefreshIcon, text: "حدّث الصفحة", desc: "أحياناً المشكلة تنحل بتحديث بسيط" },
   { Icon: CookieIcon, text: "امسح الكوكيز", desc: "امسح بيانات المتصفح وجرب مرة ثانية" },
-  { Icon: GlobeIcon, text: "جرب متصفح ثاني", desc: "Chrome أو Firefox أو Edge" },
-  { Icon: LogInIcon, text: "لا تسجل خروج", desc: "إذا SSO واقف وأنت داخل، لا تطلع!" },
-  { Icon: MailIcon, text: "البريد مستقل", desc: "البريد الجامعي يشتغل لحاله عن البلاك بورد" },
 ];
 
 function Tips() {
   return (
     <section className="flex flex-col gap-4">
       <h2 className="text-2xl font-black tracking-tight text-black">نصائح وحلول</h2>
+      
+      {/* ما الفرق explanation */}
+      <BCard className="p-4 bg-yellow-100">
+        <div className="flex items-start gap-3">
+          <InfoIcon />
+          <div>
+            <p className="text-sm font-black text-black">ما الفرق؟</p>
+            <p className="text-xs text-black/70 mt-1">
+              <strong>SSO</strong> = صفحة تسجيل الدخول الموحد للجامعة. <strong>البلاك بورد</strong> = نظام المحاضرات والواجبات.
+            </p>
+            <p className="text-xs text-black/70 mt-1">
+              إذا الـ SSO واقف ما تقدر تدخل حتى لو البلاك بورد شغال، لأن تسجيل الدخول يمر عبر SSO أولاً.
+            </p>
+          </div>
+        </div>
+      </BCard>
+
       <div className="grid gap-4 sm:grid-cols-2">
         {tips.map((t, i) => {
           const { Icon } = t;
-          return (
-            <BCard key={i} className="p-4 bg-white flex items-start gap-3">
+          const content = (
+            <BCard key={i} className={`p-4 bg-white flex items-start gap-3 ${t.link ? "hover:bg-cyan-50 transition-colors" : ""}`}>
               <div className="w-10 h-10 bg-cyan-200 border-2 border-black flex items-center justify-center shrink-0">
                 <Icon />
               </div>
@@ -339,6 +349,15 @@ function Tips() {
               </div>
             </BCard>
           );
+          
+          if (t.link) {
+            return (
+              <a key={i} href={t.link} target="_blank" rel="noopener noreferrer">
+                {content}
+              </a>
+            );
+          }
+          return content;
         })}
       </div>
     </section>
