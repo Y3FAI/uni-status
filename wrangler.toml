@@ -1,0 +1,19 @@
+name = "seu-status"
+main = "src/index.ts"
+compatibility_date = "2025-02-14"
+
+[triggers]
+crons = ["*/1 * * * *"]
+
+[[kv_namespaces]]
+binding = "STATUS_KV"
+id = "PLACEHOLDER_KV_ID"
+
+[vars]
+TELEGRAM_CHAT_ID = ""
+VAPID_SUBJECT = "mailto:admin@example.com"
+
+# Secrets (set via `wrangler secret put`):
+# TELEGRAM_BOT_TOKEN
+# VAPID_PUBLIC_KEY
+# VAPID_PRIVATE_KEY
