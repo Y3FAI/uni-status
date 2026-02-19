@@ -1,0 +1,46 @@
+<svg width="1200" height="630" viewBox="0 0 1200 630" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <style>
+      @import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@600;700&amp;display=swap');
+      .title { font-family: 'IBM Plex Sans Arabic', sans-serif; font-weight: 700; }
+      .subtitle { font-family: 'IBM Plex Sans Arabic', sans-serif; font-weight: 600; }
+    </style>
+  </defs>
+  
+  <!-- Background -->
+  <rect width="1200" height="630" fill="#f5f0e8"/>
+  
+  <!-- Border -->
+  <rect x="20" y="20" width="1160" height="590" fill="none" stroke="#000" stroke-width="4"/>
+  
+  <!-- Status Icons Row -->
+  <g transform="translate(600, 200)">
+    <!-- Green check circle -->
+    <circle cx="-150" cy="0" r="60" fill="#10b981" stroke="#000" stroke-width="3"/>
+    <path d="M-175 0 L-160 15 L-125 -20" stroke="#000" stroke-width="6" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+    
+    <!-- Yellow warning circle -->
+    <circle cx="0" cy="0" r="60" fill="#eab308" stroke="#000" stroke-width="3"/>
+    <rect x="-6" y="-30" width="12" height="40" fill="#000"/>
+    <circle cx="0" cy="25" r="8" fill="#000"/>
+    
+    <!-- Red X circle -->
+    <circle cx="150" cy="0" r="60" fill="#ef4444" stroke="#000" stroke-width="3"/>
+    <path d="M125 -25 L175 25 M175 -25 L125 25" stroke="#000" stroke-width="6" stroke-linecap="round"/>
+  </g>
+  
+  <!-- Title (Arabic - RTL) -->
+  <text x="600" y="380" text-anchor="middle" class="title" font-size="56" fill="#000">
+    حالة أنظمة الجامعة السعودية الإلكترونية
+  </text>
+  
+  <!-- Subtitle -->
+  <text x="600" y="450" text-anchor="middle" class="subtitle" font-size="28" fill="#555">
+    تتبع حالة البلاك بورد والخدمات الإلكترونية
+  </text>
+  
+  <!-- Domain -->
+  <text x="600" y="560" text-anchor="middle" class="subtitle" font-size="24" fill="#888">
+    seu-status.y3f.me
+  </text>
+</svg>

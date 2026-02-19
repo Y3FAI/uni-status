@@ -1,0 +1,21 @@
+{
+  "name": "حالة أنظمة الجامعة السعودية الإلكترونية",
+  "short_name": "حالة SEU",
+  "description": "صفحة حالة غير رسمية لخدمات الجامعة السعودية الإلكترونية",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#f5f0e8",
+  "theme_color": "#10b981",
+  "orientation": "portrait-primary",
+  "dir": "rtl",
+  "lang": "ar",
+  "icons": [
+    {
+      "src": "/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ],
+  "categories": ["utilities", "education"]
+}

@@ -1,0 +1,6 @@
+# Robots.txt for SEU Status
+User-agent: *
+Allow: /
+
+# Sitemap location
+Sitemap: https://seu-status.y3f.me/sitemap.xml
