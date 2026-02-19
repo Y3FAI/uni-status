@@ -9,7 +9,7 @@ const shadowSm = "shadow-[3px_3px_0px_0px_rgba(0,0,0,1)]";
 // Status config
 const statusConfig: Record<Status, { bg: string; label: string }> = {
   up: { bg: "bg-emerald-300", label: "شغال" },
-  degraded: { bg: "bg-yellow-300", label: "بطيء" },
+  degraded: { bg: "bg-yellow-300", label: "مشاكل" },
   down: { bg: "bg-red-400", label: "واقف" },
 };
 
@@ -23,18 +23,14 @@ const overallLabels: Record<Status, { answer: string; status: string }> = {
 const serviceNames: Record<string, string> = {
   lms: "البلاك بورد",
   sso: "تسجيل الدخول SSO",
-  iam: "بوابة IAM",
   eservice: "الخدمات الإلكترونية",
-  admission: "القبول",
   email: "البريد الإلكتروني",
 };
 
 const serviceDescriptions: Record<string, string> = {
   lms: "نظام إدارة التعلم - المحاضرات والواجبات والدرجات",
   sso: "بوابة تسجيل الدخول الموحد للجامعة",
-  iam: "بوابة إدارة الهوية",
   eservice: "الخدمات الإلكترونية للطلاب",
-  admission: "بوابة القبول والتسجيل",
   email: "البريد الإلكتروني (Microsoft 365)",
 };
 
@@ -434,7 +430,7 @@ function Timeline({ currentStatus, history }: { currentStatus: Status; history: 
           <span className="w-3 h-3 bg-emerald-400 border-2 border-black" /> شغال
         </span>
         <span className="flex items-center gap-1.5">
-          <span className="w-3 h-3 bg-yellow-400 border-2 border-black" /> بطيء
+          <span className="w-3 h-3 bg-yellow-400 border-2 border-black" /> مشاكل
         </span>
         <span className="flex items-center gap-1.5">
           <span className="w-3 h-3 bg-red-400 border-2 border-black" /> واقف
@@ -563,7 +559,7 @@ function Notify({ apiUrl }: { apiUrl: string }) {
 }
 
 // Main component
-const POLL_INTERVAL = 30;
+const POLL_INTERVAL = 60;
 
 export default function StatusApp() {
   const [data, setData] = useState<StatusResponse | null>(null);
@@ -638,6 +634,9 @@ export default function StatusApp() {
 
   return (
     <main className="mx-auto max-w-2xl px-4 py-12 flex flex-col gap-10 sm:px-6 sm:py-16">
+      <header className="text-center">
+        <h1 className="text-lg font-bold text-black/60 tracking-wide">حالة أنظمة الجامعة السعودية الإلكترونية</h1>
+      </header>
       <Hero
         status={overallStatus}
         responseTime={responseTime}
@@ -651,7 +650,7 @@ export default function StatusApp() {
       <Notify apiUrl={apiUrl} />
       <footer className="flex flex-col items-center gap-1 pt-8 border-t-3 border-black">
         <p className="text-xs font-bold text-black/50 text-center tracking-wider">
-          غير رسمي. ليس الجامعة. يتحقق كل 30 ثانية.
+          تطبيق غير رسمي تم تطويره من قبل طلاب الجامعة السعودية الإلكترونية
         </p>
       </footer>
     </main>

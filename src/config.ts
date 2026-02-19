@@ -15,15 +15,7 @@ export const SERVICES: ServiceConfig[] = [
     url: "https://sso.seu.edu.sa/samlsso",
     method: "HEAD",
     expectedStatuses: [200, 301, 302, 400, 401, 403],
-    interval: 30,
-  },
-  {
-    id: "iam",
-    name: "IAM Portal",
-    url: "https://iam.seu.edu.sa/SEUSSO/pages/login.jsp",
-    method: "GET",
-    expectedStatuses: [200],
-    interval: 120,
+    interval: 60,
   },
   {
     id: "eservice",
@@ -31,15 +23,7 @@ export const SERVICES: ServiceConfig[] = [
     url: "https://eservice.seu.edu.sa/",
     method: "GET",
     expectedStatuses: [200],
-    interval: 120,
-  },
-  {
-    id: "admission",
-    name: "Admission",
-    url: "https://admission.seu.edu.sa/admission",
-    method: "GET",
-    expectedStatuses: [200],
-    interval: 120,
+    interval: 60,
   },
   {
     id: "email",
@@ -47,7 +31,7 @@ export const SERVICES: ServiceConfig[] = [
     url: "https://outlook.office365.com/owa/seu.edu.sa",
     method: "HEAD",
     expectedStatuses: [401],
-    interval: 300,
+    interval: 60,
   },
 ];
 
